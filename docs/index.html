@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI vs AI — NIDS Research | CPBA · PAN · ASTRA</title>
+  <meta name="description"
+        content="Interactive demo of three adversarial machine learning papers on Network Intrusion Detection Systems. Backdoor attacks, adaptive normalization, and RL-driven adversarial training." />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+
+  <!-- Our CSS -->
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════
+     NAV
+════════════════════════════════════════════════ -->
+<nav>
+  <span class="logo">&#9632; NIDS-AI</span>
+  <ul>
+    <li><a href="#papers">Papers</a></li>
+    <li><a href="#arena">Battle Arena</a></li>
+    <li><a href="#results">Results</a></li>
+    <li><a href="#about">About</a></li>
+  </ul>
+</nav>
+
+<!-- ══════════════════════════════════════════════
+     HERO
+════════════════════════════════════════════════ -->
+<section id="hero">
+  <canvas id="hero-canvas"></canvas>
+
+  <div class="hero-badge">
+    <span class="dot"></span>
+    AI&thinsp;vs&thinsp;AI &mdash; Adversarial ML Research
+  </div>
+
+  <h1>
+    When <span class="accent">Attackers</span> Learn<br />
+    the <span class="accent2">Defender</span> Adapts
+  </h1>
+
+  <p class="hero-sub">
+    Three peer-reviewed papers on adversarial robustness in ML-based
+    Network Intrusion Detection Systems&mdash;backdoor attacks, adaptive
+    normalization, and reinforcement-learning-driven defenses.
+  </p>
+
+  <div class="hero-btns">
+    <a href="#arena" class="btn btn-primary">&#9654;&nbsp; Watch the Battle</a>
+    <a href="#papers" class="btn btn-outline">&#128196;&nbsp; Read the Papers</a>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══════════════════════════════════════════════
+     PAPERS
+════════════════════════════════════════════════ -->
+<section id="papers">
+  <div class="section-label">Research</div>
+  <h2>Three Papers, One Ecosystem</h2>
+  <p class="section-desc">
+    Each paper attacks a different layer of the problem: how attackers hide,
+    how defenses normalize, and how the two sides learn from each other.
+  </p>
+
+  <div class="papers-grid">
+
+    <!-- Paper 1: CPBA -->
+    <div class="paper-card">
+      <div class="paper-tag tag-blue">Paper 1 &mdash; CPBA</div>
+      <h3>Constraint-Preserving Backdoor Attacks on ML-Based NIDS</h3>
+      <p>
+        Backdoor triggers that respect protocol validity, socket-level
+        realizability, and inter-feature statistics&mdash;making them
+        indistinguishable from legitimate traffic.
+      </p>
+      <div class="paper-metric">
+        <div class="metric-pill">ASR <strong>&gt;96%</strong></div>
+        <div class="metric-pill">Clean Acc <strong>&gt;99%</strong></div>
+        <div class="metric-pill">3 Datasets</div>
+      </div>
+    </div>
+
+    <!-- Paper 2: PAN -->
+    <div class="paper-card">
+      <div class="paper-tag tag-purple">Paper 2 &mdash; PAN</div>
+      <h3>Perturbation-Aware Normalization for Adversarially Robust NIDS</h3>
+      <p>
+        A learnable gate that blends LayerNorm with raw activations&mdash;
+        tightening normalization under perturbations and relaxing it for
+        clean inputs. Robustness without sacrificing clean F1.
+      </p>
+      <div class="paper-metric">
+        <div class="metric-pill">Clean F1 <strong>+39%</strong> vs PGD-AT</div>
+        <div class="metric-pill">Params <strong>+0.1%</strong></div>
+        <div class="metric-pill">3 Datasets</div>
+      </div>
+    </div>
+
+    <!-- Paper 3: ASTRA -->
+    <div class="paper-card">
+      <div class="paper-tag tag-green">Paper 3 &mdash; ASTRA</div>
+      <h3>Asymmetric RL for Adaptive Adversarial Training in NIDS</h3>
+      <p>
+        A DDPG attacker learns adaptive perturbations; a Dueling-DQN
+        defender trains on those examples via supervised cross-entropy.
+        LayerNorm reduces Jacobian norms by <strong>42&times;&ndash;870&times;</strong>.
+      </p>
+      <div class="paper-metric">
+        <div class="metric-pill">Robust F1 <strong>0.761</strong></div>
+        <div class="metric-pill">Drop <strong>&lt;0.03%</strong></div>
+        <div class="metric-pill">Black-box</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══════════════════════════════════════════════
+     BATTLE ARENA
+════════════════════════════════════════════════ -->
+<div id="arena">
+<div class="inner">
+
+  <div class="section-label">Live Demo</div>
+  <h2>ASTRA Battle Arena</h2>
+  <p class="section-desc">
+    Watch a simplified simulation of the DDPG attacker perturbing network
+    packets while the Dueling-DQN defender classifies them in real time.
+    Stats converge toward the published experimental results.
+  </p>
+
+  <div class="arena-layout">
+
+    <!-- Canvas -->
+    <div>
+      <div class="arena-vis">
+        <canvas id="battle-canvas"></canvas>
+        <div class="step-counter">
+          Phase: <span id="phase-badge" style="color:#64748b">Warmup</span>
+          &nbsp;&bull;&nbsp;
+          Step: <span id="stat-step">0</span>
+          &nbsp;&bull;&nbsp;
+          Episode: <span id="stat-episode">0</span>
+        </div>
+        <div class="arena-controls">
+          <button class="btn btn-primary" id="btn-start"
+                  onclick="battleSim.start()">&#9654; Start</button>
+          <button class="btn btn-outline" id="btn-pause"
+                  onclick="battleSim.pause()" disabled>&#9646;&#9646; Pause</button>
+          <button class="btn btn-outline"
+                  onclick="battleSim.reset()">&#8635; Reset</button>
+
+          <div class="speed-toggle">
+            Speed:
+            <button class="speed-btn active" data-speed="1"
+                    onclick="battleSim.setSpeed(1)">1x</button>
+            <button class="speed-btn" data-speed="2"
+                    onclick="battleSim.setSpeed(2)">2x</button>
+            <button class="speed-btn" data-speed="3"
+                    onclick="battleSim.setSpeed(3)">3x</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Event Log -->
+      <div style="margin-top:1rem;">
+        <div class="section-label" style="margin-bottom:0.4rem; font-size:0.7rem;">Event Log</div>
+        <div class="log-box" id="battle-log"></div>
+      </div>
+    </div>
+
+    <!-- Stats sidebar -->
+    <div class="arena-stats">
+
+      <!-- Attacker -->
+      <div class="stat-card">
+        <h4>&#9876; DDPG Attacker</h4>
+
+        <div class="stat-row">
+          <span class="stat-label tooltip" data-tip="Fraction of adversarial packets that evade detection">Attack Success Rate</span>
+          <span class="stat-val val-red" id="stat-atk-success">68.0%</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill fill-red" id="bar-atk" style="width:68%"></div></div>
+
+        <div class="stat-row" style="margin-top:0.6rem">
+          <span class="stat-label">Reward</span>
+          <span class="stat-val val-red" id="stat-atk-reward">0.000</span>
+        </div>
+      </div>
+
+      <!-- Defender -->
+      <div class="stat-card">
+        <h4>&#128737; Dueling-DQN Defender</h4>
+
+        <div class="stat-row">
+          <span class="stat-label tooltip" data-tip="Classification accuracy under adversarial attack">Robust Accuracy</span>
+          <span class="stat-val val-green" id="stat-def-accuracy">42.0%</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill fill-green" id="bar-def" style="width:42%"></div></div>
+
+        <div class="stat-row" style="margin-top:0.6rem">
+          <span class="stat-label">Reward</span>
+          <span class="stat-val val-green" id="stat-def-reward">0.000</span>
+        </div>
+      </div>
+
+      <!-- F1 Scores -->
+      <div class="stat-card">
+        <h4>&#128202; F1 Metrics (CIC-IDS-2017)</h4>
+
+        <div class="stat-row">
+          <span class="stat-label">Clean Macro-F1</span>
+          <span class="stat-val val-blue" id="stat-clean-f1">0.4200</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill fill-blue" id="bar-clean" style="width:42%"></div></div>
+
+        <div class="stat-row" style="margin-top:0.6rem">
+          <span class="stat-label">Robust Macro-F1</span>
+          <span class="stat-val val-yellow" id="stat-robust-f1">0.4100</span>
+        </div>
+        <div class="progress-bar" style="margin-top:0.2rem"><div class="progress-fill fill-purple" id="bar-rob" style="width:41%"></div></div>
+
+        <p style="font-size:0.75rem; color:var(--muted); margin-top:0.9rem; line-height:1.5;">
+          Target (published): Clean&nbsp;F1&nbsp;=&nbsp;<strong>0.7608</strong>,
+          Robust&nbsp;F1&nbsp;=&nbsp;<strong>0.7610</strong>.<br/>
+          PGD-AT baseline: Clean&nbsp;F1&nbsp;=&nbsp;<strong>0.4998</strong>.
+        </p>
+      </div>
+
+      <!-- Legend -->
+      <div class="stat-card">
+        <h4>&#128681; Packet Legend</h4>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.4rem; font-size:0.8rem;">
+          <span style="color:#10b981">&#9679; BENIGN</span>
+          <span style="color:#ef4444">&#9679; DDoS</span>
+          <span style="color:#f59e0b">&#9679; DoS</span>
+          <span style="color:#a78bfa">&#9679; Port Scan</span>
+          <span style="color:#00d4ff">&#9679; Backdoor</span>
+          <span style="color:#ef4444; font-style:italic">ADV = perturbed</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ══════════════════════════════════════════════
+     RESULTS
+════════════════════════════════════════════════ -->
+<section id="results">
+  <div class="section-label">Experimental Results</div>
+  <h2>Key Findings</h2>
+  <p class="section-desc">
+    All charts use numbers from published experimental runs across
+    CIC-IDS-2017, UNSW-NB15, and TON-IoT benchmarks.
+  </p>
+
+  <div class="charts-grid">
+
+    <div class="chart-card">
+      <h4>Robustness Comparison — CIC-IDS-2017</h4>
+      <p>ASTRA maintains Macro-F1 under attack while PGD-AT sacrifices 52% clean accuracy.</p>
+      <canvas id="chart-robustness" height="220"></canvas>
+    </div>
+
+    <div class="chart-card">
+      <h4>PAN vs PGD-AT — All Datasets</h4>
+      <p>PAN achieves much higher clean F1 than PGD-AT while preserving robustness.</p>
+      <canvas id="chart-pan" height="220"></canvas>
+    </div>
+
+    <div class="chart-card">
+      <h4>CPBA — Attack Success Rate by Model</h4>
+      <p>Protocol-Constrained Triggers (PCT) outperform BadNets across all target models.</p>
+      <canvas id="chart-backdoor" height="220"></canvas>
+    </div>
+
+    <div class="chart-card">
+      <h4>LayerNorm Ablation — Perturbation Robustness</h4>
+      <p>DQN with LayerNorm degrades significantly slower as perturbation scale increases.</p>
+      <canvas id="chart-jacobian" height="220"></canvas>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══════════════════════════════════════════════
+     ARCHITECTURE
+════════════════════════════════════════════════ -->
+<section id="about">
+  <div class="section-label">System Design</div>
+  <h2>Architecture Overview</h2>
+  <p class="section-desc">
+    The three works form a unified research program: CPBA exposes the
+    threat, PAN defends at the architecture level, and ASTRA closes the
+    loop with RL-driven adaptive training.
+  </p>
+
+  <!-- SVG Architecture Diagram -->
+  <div class="arch-wrap">
+    <svg viewBox="0 0 900 300" xmlns="http://www.w3.org/2000/svg"
+         style="width:100%; max-width:900px; font-family:Inter,sans-serif;">
+
+      <!-- Background panels -->
+      <rect x="10" y="20" width="200" height="260" rx="12"
+            fill="#131929" stroke="#1e2d4a" stroke-width="1.5"/>
+      <rect x="240" y="20" width="200" height="260" rx="12"
+            fill="#131929" stroke="#1e2d4a" stroke-width="1.5"/>
+      <rect x="470" y="20" width="200" height="260" rx="12"
+            fill="#131929" stroke="#1e2d4a" stroke-width="1.5"/>
+      <rect x="700" y="20" width="190" height="260" rx="12"
+            fill="#131929" stroke="#1e2d4a" stroke-width="1.5"/>
+
+      <!-- Arrows between panels -->
+      <defs>
+        <marker id="ah" markerWidth="8" markerHeight="8"
+                refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#1e2d4a"/>
+        </marker>
+        <marker id="ah-red" markerWidth="8" markerHeight="8"
+                refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#ef4444"/>
+        </marker>
+        <marker id="ah-green" markerWidth="8" markerHeight="8"
+                refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#10b981"/>
+        </marker>
+      </defs>
+
+      <!-- Flow arrows -->
+      <line x1="210" y1="150" x2="238" y2="150"
+            stroke="#1e2d4a" stroke-width="2" marker-end="url(#ah)"/>
+      <line x1="440" y1="150" x2="468" y2="150"
+            stroke="#ef4444" stroke-width="2" marker-end="url(#ah-red)"/>
+      <line x1="670" y1="150" x2="698" y2="150"
+            stroke="#10b981" stroke-width="2" marker-end="url(#ah-green)"/>
+
+      <!-- Panel 1: Network Traffic -->
+      <text x="110" y="52" text-anchor="middle" font-size="11"
+            font-weight="700" fill="#00d4ff">Network Traffic</text>
+      <rect x="35" y="65" width="150" height="32" rx="6"
+            fill="#1e2d4a" stroke="#00d4ff22"/>
+      <text x="110" y="86" text-anchor="middle" font-size="10" fill="#94a3b8">CIC-IDS-2017</text>
+      <rect x="35" y="105" width="150" height="32" rx="6"
+            fill="#1e2d4a" stroke="#00d4ff22"/>
+      <text x="110" y="126" text-anchor="middle" font-size="10" fill="#94a3b8">UNSW-NB15</text>
+      <rect x="35" y="145" width="150" height="32" rx="6"
+            fill="#1e2d4a" stroke="#00d4ff22"/>
+      <text x="110" y="166" text-anchor="middle" font-size="10" fill="#94a3b8">TON-IoT</text>
+      <text x="110" y="220" text-anchor="middle" font-size="9"
+            fill="#64748b">80 / 67 / 34 features</text>
+
+      <!-- Panel 2: CPBA -->
+      <text x="340" y="52" text-anchor="middle" font-size="11"
+            font-weight="700" fill="#00d4ff">CPBA</text>
+      <text x="340" y="68" text-anchor="middle" font-size="9"
+            fill="#64748b">Backdoor Attack</text>
+      <rect x="265" y="80" width="150" height="40" rx="6"
+            fill="#1e2d4a" stroke="#00d4ff33"/>
+      <text x="340" y="97" text-anchor="middle" font-size="9" fill="#94a3b8">Protocol-Constrained</text>
+      <text x="340" y="111" text-anchor="middle" font-size="9" fill="#94a3b8">Trigger (PCT)</text>
+      <rect x="265" y="130" width="150" height="40" rx="6"
+            fill="#1e2d4a" stroke="#00d4ff22"/>
+      <text x="340" y="147" text-anchor="middle" font-size="9" fill="#94a3b8">Feature validity</text>
+      <text x="340" y="161" text-anchor="middle" font-size="9" fill="#94a3b8">constraints</text>
+      <text x="340" y="200" text-anchor="middle" font-size="9"
+            fill="#10b981">ASR &gt; 96%</text>
+      <text x="340" y="215" text-anchor="middle" font-size="9"
+            fill="#10b981">Clean Acc &gt; 99%</text>
+
+      <!-- Panel 3: PAN + ASTRA -->
+      <text x="570" y="52" text-anchor="middle" font-size="11"
+            font-weight="700" fill="#ef4444">ASTRA</text>
+      <text x="570" y="68" text-anchor="middle" font-size="9"
+            fill="#64748b">RL Adversarial Training</text>
+      <rect x="495" y="80" width="150" height="40" rx="6"
+            fill="#1e2d4a" stroke="#ef444433"/>
+      <text x="570" y="97" text-anchor="middle" font-size="9" fill="#94a3b8">DDPG Attacker</text>
+      <text x="570" y="111" text-anchor="middle" font-size="9" fill="#94a3b8">(continuous action)</text>
+      <rect x="495" y="130" width="150" height="40" rx="6"
+            fill="#1e2d4a" stroke="#10b98133"/>
+      <text x="570" y="147" text-anchor="middle" font-size="9" fill="#94a3b8">Dueling-DQN Defender</text>
+      <text x="570" y="161" text-anchor="middle" font-size="9" fill="#94a3b8">(supervised CE loss)</text>
+      <text x="570" y="200" text-anchor="middle" font-size="9"
+            fill="#10b981">Robust F1: 0.761</text>
+      <text x="570" y="215" text-anchor="middle" font-size="9"
+            fill="#10b981">Drop: &lt;0.03%</text>
+
+      <!-- Panel 4: PAN -->
+      <text x="795" y="52" text-anchor="middle" font-size="11"
+            font-weight="700" fill="#a78bfa">PAN</text>
+      <text x="795" y="68" text-anchor="middle" font-size="9"
+            fill="#64748b">Adaptive Normalization</text>
+      <rect x="720" y="80" width="155" height="40" rx="6"
+            fill="#1e2d4a" stroke="#7c3aed33"/>
+      <text x="797" y="97" text-anchor="middle" font-size="9" fill="#94a3b8">Learnable gate:</text>
+      <text x="797" y="111" text-anchor="middle" font-size="9" fill="#94a3b8">LayerNorm + raw acts</text>
+      <rect x="720" y="130" width="155" height="40" rx="6"
+            fill="#1e2d4a" stroke="#7c3aed22"/>
+      <text x="797" y="147" text-anchor="middle" font-size="9" fill="#94a3b8">2-phase training:</text>
+      <text x="797" y="161" text-anchor="middle" font-size="9" fill="#94a3b8">clean → noise-robust</text>
+      <text x="797" y="200" text-anchor="middle" font-size="9"
+            fill="#10b981">+39% Clean F1</text>
+      <text x="797" y="215" text-anchor="middle" font-size="9"
+            fill="#10b981">vs PGD-AT</text>
+
+    </svg>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══════════════════════════════════════════════
+     FOOTER
+════════════════════════════════════════════════ -->
+<footer>
+  <p>
+    Research in progress &mdash; papers under review.<br/>
+    Built with pure HTML + JS &mdash; no servers, no frameworks.<br/>
+    &copy; 2025&ndash;2026. All rights reserved.
+  </p>
+</footer>
+
+<!-- Scripts -->
+<script src="assets/js/battle.js"></script>
+<script src="assets/js/charts.js"></script>
+
+</body>
+</html>

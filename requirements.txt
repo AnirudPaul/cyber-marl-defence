@@ -1,0 +1,9 @@
+flask
+flask-socketio
+eventlet
+numpy
+pandas
+torch
+shap
+lime           # optional, only if you want LIME
+captum         # optional, for Integrated Gradients

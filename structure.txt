@@ -1,0 +1,27 @@
+cyber_marl_defence/
+├── data/
+│   ├── GeneratedLabelledFlows/        # raw CSVs from CIC-IDS-2017
+│   ├── processed/
+│   │   ├── flows_combined.csv         # all CSVs merged
+│   │   ├── X_train.npy
+│   │   ├── y_train.npy
+│   │   ├── scalers.pkl
+│   │   └── splits/
+│   │       ├── monday.npy             # benign baseline
+│   │       ├── tuesday.npy            # brute-force
+│   │       ├── wednesday.npy          # DoS/DDoS
+│   │       ├── thursday.npy           # web attacks
+│   │       └── friday.npy             # botnet/portscan
+│
+├── src/
+│   ├── data_preprocess.py             # main preprocessing script
+│   ├── utils.py                       # helpers, encoders, scalers
+│
+├── notebooks/
+│   └── data_preprocessing.ipynb       # interactive version
+│
+├── results/
+│   └── logs/                          # preprocessing logs
+│
+├── requirements.txt
+└── README.md
