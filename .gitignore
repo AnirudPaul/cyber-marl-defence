@@ -47,6 +47,9 @@ desktop.ini
 # ── Claude Code local config (not for repo) ───────────────────
 .claude/
 
-# ── Keep these result files (small, useful for demo) ──────────
-!results/plots/
-!results/robustness.csv
+# ── Research code (unreleased — withheld until publication) ───
+src/
+results/
+test_env.py
+commands.txt
+structure.txt
